@@ -1,5 +1,8 @@
 # AVP_LAB_7
-MPI  +  FISH EYE  +  BILINEAR Interpolation
+MPI  +  FISH EYE  +  BILINEAR Interpolation 
+или
+ЧЕШИРСКИЙ КОТ
+
 
 "AVP5.pdf" Вариант 2
 
