@@ -1,4 +1,4 @@
-﻿#include <opencv2/core/core.hpp>
+#include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -134,21 +134,28 @@ int main(int argc, char* argv[])
                     }
                 }
 
-                for (int j = 1; x + j < image1.cols; j++)
+                for (int j = -1; y + j == 0; j--)
                 {
-                    if (image1.at<Vec3b>(y, x + j)[0] < 255 && image1.at<Vec3b>(y, x + j)[1] < 255 && image1.at<Vec3b>(y, x + j)[2] < 255)
+                    if (image1.at<Vec3b>(y + j, x)[0] < 255 && image1.at<Vec3b>(y + j, x)[1] < 255 && image1.at<Vec3b>(y + j, x)[2] < 255)
                     {
-                        tx1 = x + j;
+                        ty1 = y - j;
                         break;
                     }
                 }
 
+                if (x == 200)
+                {
+                    image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(y, x - 1)[0];
+                    image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(y, x - 1)[1];
+                    image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(y, x - 1)[2];
+                }
+                
                 ty = y;
-                alpha_y = (tx1 - ty) / (tx1 - ty0);
+                alpha_y = (ty1 - ty) / (ty1 - ty0);
 
-                image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(ty0, x)[0] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty, tx1)[0];
-                image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(ty0, x)[1] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty, tx1)[1];
-                image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(ty0, x)[2] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty, tx1)[2];
+                image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(ty0, x)[0] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[0];
+                image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(ty0, x)[1] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[1];
+                image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(ty0, x)[2] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[2];
             }
 
         }
