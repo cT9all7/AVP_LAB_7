@@ -112,7 +112,6 @@ int main(int argc, char* argv[])
     imshow("Image3", image1);
     waitKey();
 
-    //interpol
     float alpha_x, alpha_y;
     float tx0, tx1, tx, ty0, ty1, ty;
 
@@ -123,39 +122,42 @@ int main(int argc, char* argv[])
     {
         for (float x = 0; x < image1.cols; x++)
         {   
-            if (image1.at<Vec3b>(y, x)[0] == 255 && image1.at<Vec3b>(y, x)[1] == 255 && image1.at<Vec3b>(y, x)[2] == 255 )
+            if (image1.at<Vec3b>(y, x)[0] == 255 && image1.at<Vec3b>(y, x)[1] == 255 && image1.at<Vec3b>(y, x)[2] == 255)
             {
                 for (int j = 1; y + j < image1.rows; j++)
                 {
-                    if (image1.at<Vec3b>(y + j, x)[0] < 255 && image1.at<Vec3b>(y + j, x)[1] < 255 && image1.at<Vec3b>(y + j, x)[2] < 255)
+                    if (image1.at<Vec3b>(y + j, x)[0] != 255 && image1.at<Vec3b>(y + j, x)[1] != 255 && image1.at<Vec3b>(y + j, x)[2] != 255)
                     {
                         ty0 = y + j;
                         break;
                     }
                 }
-
                 for (int j = -1; y + j == 0; j--)
                 {
-                    if (image1.at<Vec3b>(y + j, x)[0] < 255 && image1.at<Vec3b>(y + j, x)[1] < 255 && image1.at<Vec3b>(y + j, x)[2] < 255)
+                    if (image1.at<Vec3b>(y + j, x)[0] != 255 && image1.at<Vec3b>(y + j, x)[1] != 255 && image1.at<Vec3b>(y + j, x)[2] != 255)
                     {
                         ty1 = y - j;
                         break;
                     }
                 }
-
-                if (x == 200)
-                {
-                    image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(y, x - 1)[0];
-                    image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(y, x - 1)[1];
-                    image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(y, x - 1)[2];
-                }
-                
                 ty = y;
                 alpha_y = (ty1 - ty) / (ty1 - ty0);
 
-                image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(ty0, x)[0] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[0];
-                image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(ty0, x)[1] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[1];
-                image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(ty0, x)[2] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[2];
+                if (x == 200)
+                {
+                    image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(y, x-1)[0];
+                    image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(y, x-1)[1];
+                    image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(y, x-1)[2];
+                }
+               
+                //answer
+                
+                 else
+                 {
+                     image1.at<Vec3b>(y, x)[0] = image1.at<Vec3b>(ty0, x)[0] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[0];
+                     image1.at<Vec3b>(y, x)[1] = image1.at<Vec3b>(ty0, x)[1] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[1];
+                    image1.at<Vec3b>(y, x)[2] = image1.at<Vec3b>(ty0, x)[2] * alpha_y + (1 - alpha_y) * image1.at<Vec3b>(ty1, x)[2];
+                 }
             }
 
         }
